@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
+import Register from './components/Register';
 import Header from './components/Header';
 import TaskItem from './components/TaskItem';
 
@@ -190,13 +191,28 @@ function App() {
 
 function MainApp() {
   const { user, login, loading } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
 
   if (loading) {
     return <div style={styles.loading}>Loading...</div>;
   }
 
   if (!user) {
-    return <Login onLogin={login} />;
+    if (showRegister) {
+      return (
+        <Register 
+          onRegister={login} 
+          onSwitchToLogin={() => setShowRegister(false)} 
+        />
+      );
+    } else {
+      return (
+        <Login 
+          onLogin={login} 
+          onSwitchToRegister={() => setShowRegister(true)} 
+        />
+      );
+    }
   }
 
   return <TodoApp />;
