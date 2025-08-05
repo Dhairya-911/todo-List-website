@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <header style={styles.header}>
       <div style={styles.container}>
-        <h1 style={styles.title}>Todo App</h1>
+        <h1 style={styles.title}>Todo List</h1>
         
         {user && (
           <div style={styles.userSection}>
@@ -33,10 +33,13 @@ const Header = () => {
 
 const styles = {
   header: {
-    backgroundColor: '#343a40',
-    color: 'white',
-    padding: '1rem 0',
+    backgroundColor: 'rgba(30, 30, 46, 0.9)',
+    color: '#e4e4e7',
+    padding: '1.5rem 0',
     marginBottom: '2rem',
+    backdropFilter: 'blur(20px)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+    border: '1px solid rgba(99, 102, 241, 0.2)',
   },
   container: {
     maxWidth: '1200px',
@@ -48,35 +51,50 @@ const styles = {
   },
   title: {
     margin: 0,
-    fontSize: '1.5rem',
+    fontSize: '1.8rem',
+    fontWeight: '700',
+    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
   },
   userSection: {
     display: 'flex',
     alignItems: 'center',
-    gap: '1rem',
+    gap: '1.5rem',
   },
   userInfo: {
     fontSize: '1rem',
     display: 'flex',
     alignItems: 'center',
-    gap: '0.5rem',
+    gap: '0.75rem',
+    color: '#a1a1aa',
+    fontWeight: '500',
   },
   adminBadge: {
-    backgroundColor: '#dc3545',
+    backgroundColor: '#ef4444',
     color: 'white',
-    padding: '0.25rem 0.5rem',
-    borderRadius: '12px',
-    fontSize: '0.75rem',
-    fontWeight: 'bold',
+    padding: '0.4rem 0.8rem',
+    borderRadius: '20px',
+    fontSize: '0.8rem',
+    fontWeight: '600',
+    boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)',
   },
   logoutButton: {
-    backgroundColor: '#6c757d',
+    backgroundColor: '#6366f1',
     color: 'white',
     border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '4px',
+    padding: '0.75rem 1.5rem',
+    borderRadius: '12px',
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+    '&:hover': {
+      backgroundColor: '#4f46e5',
+      transform: 'translateY(-1px)',
+      boxShadow: '0 6px 20px rgba(99, 102, 241, 0.5)',
+    },
   },
 };
 
