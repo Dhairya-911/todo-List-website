@@ -10,6 +10,7 @@ app.use(express.json());
 // Routes
 const authRoutes = require('./routes/auth');
 const taskRoutes = require("./routes/tasks");
+const adminRoutes = require('./routes/admin');
 
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // ✅ API routes
 app.use('/api/auth', authRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ✅ Start server
 const PORT = process.env.PORT || 3000;

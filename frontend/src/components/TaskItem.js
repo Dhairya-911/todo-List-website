@@ -1,42 +1,108 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TaskItem = ({ task, onToggle, onDelete, isAdmin }) => {
+const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+
+  // Update editTitle when task.title changes (after successful edit)
+  useEffect(() => {
+    setEditTitle(task.title);
+  }, [task.title]);
+
+  const handleEditSave = () => {
+    if (editTitle.trim() && editTitle !== task.title) {
+      onEdit(task._id, editTitle.trim());
+    }
+    setIsEditing(false);
+    // Don't reset editTitle here - let useEffect handle it when task.title updates
+  };
+
+  const handleEditCancel = () => {
+    setIsEditing(false);
+    setEditTitle(task.title); // Reset to original title
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleEditSave();
+    } else if (e.key === 'Escape') {
+      handleEditCancel();
+    }
+  };
+
   return (
     <div style={{...styles.taskItem, ...(task.completed ? styles.completedTask : {})}}>
       <div style={styles.taskContent}>
-        <span
-          onClick={onToggle}
-          style={{
-            ...styles.taskTitle,
-            textDecoration: task.completed ? 'line-through' : 'none',
-            color: task.completed ? '#6c757d' : '#333'
-          }}
-        >
-          {task.title}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={handleKeyPress}
+            onBlur={handleEditSave}
+            style={styles.editInput}
+            autoFocus
+          />
+        ) : (
+          <span
+            onClick={!isEditing ? onToggle : undefined}
+            style={{
+              ...styles.taskTitle,
+              textDecoration: task.completed ? 'line-through' : 'none',
+              color: task.completed ? '#6c757d' : '#333',
+              cursor: !isEditing ? 'pointer' : 'default'
+            }}
+          >
+            {task.title}
+          </span>
+        )}
         
-        {task.completed && <span style={styles.completedBadge}>✓ Completed</span>}
+        {task.completed && !isEditing && <span style={styles.completedBadge}>✓ Completed</span>}
       </div>
       
       <div style={styles.taskActions}>
-        <button 
-          onClick={onToggle}
-          style={{
-            ...styles.actionButton,
-            ...(task.completed ? styles.undoButton : styles.completeButton)
-          }}
-        >
-          {task.completed ? 'Undo' : 'Complete'}
-        </button>
-        
-        {/* Only show delete button for admin users or if it's the user's own task */}
-        {isAdmin && (
-          <button 
-            onClick={onDelete}
-            style={{...styles.actionButton, ...styles.deleteButton}}
-          >
-            Delete
-          </button>
+        {isEditing ? (
+          <>
+            <button 
+              onClick={handleEditSave}
+              style={{...styles.actionButton, ...styles.saveButton}}
+            >
+              Save
+            </button>
+            <button 
+              onClick={handleEditCancel}
+              style={{...styles.actionButton, ...styles.cancelButton}}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button 
+              onClick={onToggle}
+              style={{
+                ...styles.actionButton,
+                ...(task.completed ? styles.undoButton : styles.completeButton)
+              }}
+            >
+              {task.completed ? 'Undo' : 'Complete'}
+            </button>
+            
+            <button 
+              onClick={() => setIsEditing(true)}
+              style={{...styles.actionButton, ...styles.editButton}}
+            >
+              Edit
+            </button>
+            
+            {/* Show delete button for admin users or the task owner */}
+            <button 
+              onClick={onDelete}
+              style={{...styles.actionButton, ...styles.deleteButton}}
+            >
+              Delete
+            </button>
+          </>
         )}
       </div>
     </div>
@@ -69,6 +135,15 @@ const styles = {
     cursor: 'pointer',
     userSelect: 'none',
   },
+  editInput: {
+    fontSize: '1rem',
+    padding: '0.5rem',
+    border: '2px solid #007bff',
+    borderRadius: '4px',
+    outline: 'none',
+    flex: 1,
+    backgroundColor: 'white',
+  },
   completedBadge: {
     backgroundColor: '#28a745',
     color: 'white',
@@ -97,6 +172,18 @@ const styles = {
   undoButton: {
     backgroundColor: '#ffc107',
     color: '#212529',
+  },
+  editButton: {
+    backgroundColor: '#007bff',
+    color: 'white',
+  },
+  saveButton: {
+    backgroundColor: '#28a745',
+    color: 'white',
+  },
+  cancelButton: {
+    backgroundColor: '#6c757d',
+    color: 'white',
   },
   deleteButton: {
     backgroundColor: '#dc3545',

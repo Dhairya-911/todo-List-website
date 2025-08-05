@@ -59,7 +59,7 @@ router.post('/register', async (req, res) => {
     await newUser.save();
 
     // Generate token
-    const token = generateToken(newUser._id.toString());
+    const token = generateToken(newUser._id.toString(), newUser.role);
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -98,7 +98,7 @@ router.post('/login', async (req, res) => {
     const demoUser = demoUsers.find(u => u.email === email && u.password === password);
     
     if (demoUser) {
-      const token = generateToken(demoUser.id);
+      const token = generateToken(demoUser.id, demoUser.role);
       return res.json({ 
         token,
         user: {
@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = generateToken(user._id.toString());
+    const token = generateToken(user._id.toString(), user.role);
     
     res.json({
       token,

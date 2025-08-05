@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header';
 import TaskItem from './components/TaskItem';
+import AdminPanel from './components/AdminPanel';
 
 const API_URL = 'http://localhost:3000/api/tasks';
 
@@ -114,6 +115,29 @@ function TodoApp() {
     }
   };
 
+  const editTask = async (id, newTitle) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title: newTitle })
+      });
+      
+      if (res.ok) {
+        const updated = await res.json();
+        setTasks(tasks.map(t => t._id === id ? updated : t));
+      } else {
+        setError('Failed to edit task');
+      }
+    } catch (error) {
+      setError('Failed to edit task');
+    }
+  };
+
   if (!user) {
     return null; // This will be handled by the main App component
   }
@@ -141,25 +165,7 @@ function TodoApp() {
           </button>
         </div>
 
-        {isAdmin() && (
-          <div style={styles.adminPanel}>
-            <h3 style={styles.adminTitle}>Admin Panel</h3>
-            <p style={styles.adminInfo}>
-              You have admin privileges. You can manage all tasks.
-            </p>
-            <div style={styles.statsSection}>
-              <div style={styles.stat}>
-                <strong>Total Tasks:</strong> {tasks.length}
-              </div>
-              <div style={styles.stat}>
-                <strong>Completed:</strong> {tasks.filter(t => t.completed).length}
-              </div>
-              <div style={styles.stat}>
-                <strong>Pending:</strong> {tasks.filter(t => !t.completed).length}
-              </div>
-            </div>
-          </div>
-        )}
+        {isAdmin() && <AdminPanel />}
 
         <div style={styles.taskList}>
           {tasks.length === 0 ? (
@@ -171,6 +177,7 @@ function TodoApp() {
                 task={t}
                 onToggle={() => toggleTask(t._id, t.completed)}
                 onDelete={() => deleteTask(t._id)}
+                onEdit={editTask}
                 isAdmin={isAdmin()}
               />
             ))
