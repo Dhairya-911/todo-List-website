@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:no-check": "react-scripts build",
+    "build": "npx react-scripts build",
+    "build:no-check": "npx react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
