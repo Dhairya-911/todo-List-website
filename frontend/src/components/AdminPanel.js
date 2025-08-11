@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from '../config/api';
 
 const AdminPanel = () => {
   const [usersWithTasks, setUsersWithTasks] = useState([]);
@@ -16,14 +17,14 @@ const AdminPanel = () => {
       const token = localStorage.getItem('token');
       
       // Fetch users with tasks
-      const usersResponse = await fetch('http://localhost:3000/api/admin/users-with-tasks', {
+      const usersResponse = await fetch(`${API_BASE_URL}/admin/users-with-tasks`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
       // Fetch statistics
-      const statsResponse = await fetch('http://localhost:3000/api/admin/stats', {
+      const statsResponse = await fetch(`${API_BASE_URL}/admin/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

@@ -8,8 +8,9 @@ import AdminPanel from './components/AdminPanel';
 import AnimatedBackground from './components/AnimatedBackground';
 import LoadingSpinner from './components/LoadingSpinner';
 import { gsapAnimations, animeAnimations, animationUtils } from './utils/animations';
+import API_BASE_URL from './config/api';
 
-const API_URL = 'http://localhost:3000/api/tasks';
+const API_URL = `${API_BASE_URL}/tasks`;
 
 function TodoApp() {
   const { user, isAdmin } = useAuth();
