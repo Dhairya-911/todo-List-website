@@ -1,4 +1,4 @@
-require("dotenv").config({ path: './config.env' });
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Routes
 const authRoutes = require('./routes/auth');
-const taskRoutes = require("./routes/tasks");
+const taskRoutes = require("./routes/Tasks");
 const adminRoutes = require('./routes/admin');
 
 // ✅ Connect to MongoDB
