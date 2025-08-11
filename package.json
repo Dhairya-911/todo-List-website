@@ -1,15 +1,19 @@
 {
-  "name": "todo-app",
+  "name": "todo-backend",
   "version": "1.0.0",
   "private": true,
+  "description": "Todo List Backend API - Node.js/Express/MongoDB",
+  "main": "backend/server.js",
   "scripts": {
-    "build": "cd frontend && npm ci && npm run build",
-    "start": "cd frontend && npm start",
-    "install:frontend": "cd frontend && npm install",
-    "install:backend": "cd backend && npm install"
+    "start": "cd backend && node server.js",
+    "dev": "cd backend && nodemon server.js",
+    "install-backend": "cd backend && npm install"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
-  }
+  },
+  "keywords": ["nodejs", "express", "mongodb", "jwt", "backend", "api"],
+  "author": "Dhairya-911",
+  "license": "MIT"
 }
