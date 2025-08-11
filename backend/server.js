@@ -10,7 +10,8 @@ const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:5000', 
-    'https://your-frontend-app.vercel.app'  // Add your Vercel domain here
+    'https://todo-list-website-fvk3drpit-dhairya-solankis-projects.vercel.app', // Your Vercel domain
+    /\.vercel\.app$/  // Allow all vercel.app subdomains
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
