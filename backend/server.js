@@ -56,6 +56,17 @@ app.get('/', (req, res) => {
   });
 });
 
+// ✅ Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    mongodb: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+    environment: process.env.NODE_ENV || "development",
+    mongoUri: process.env.MONGODB_URI ? "Configured" : "Missing"
+  });
+});
+
 // ✅ Catch-all for undefined routes
 app.get('*', (req, res) => {
   res.status(404).json({
