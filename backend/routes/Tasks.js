@@ -11,11 +11,17 @@ router.get('/', async (req, res) => {
   try {
     let tasks;
     
-    // If user is admin, show all tasks. If regular user, show only their tasks
+    // If user is admin, show all tasks with user info. If regular user, show only their tasks
     if (req.user.role === 'admin') {
-      tasks = await Task.find();
+      tasks = await Task.find().sort({ createdAt: -1 });
+      // Add user information to each task for admin view
+      tasks = tasks.map(task => ({
+        ...task.toObject(),
+        user: task.userId, // Keep the userId for frontend comparison
+        userRole: 'user' // Default role for tasks
+      }));
     } else {
-      tasks = await Task.find({ userId: req.user.id });
+      tasks = await Task.find({ userId: req.user.id }).sort({ createdAt: -1 });
     }
     
     res.json(tasks);
@@ -27,6 +33,11 @@ router.get('/', async (req, res) => {
 // Add new task
 router.post('/', async (req, res) => {
   try {
+    // Prevent admins from creating tasks
+    if (req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Admins cannot create tasks' });
+    }
+    
     const newTask = new Task({
       ...req.body,
       userId: req.user.id // Associate task with the authenticated user
@@ -41,14 +52,19 @@ router.post('/', async (req, res) => {
 // Delete task
 router.delete('/:id', async (req, res) => {
   try {
+    // Prevent admins from deleting tasks
+    if (req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Admins cannot delete tasks' });
+    }
+    
     const task = await Task.findById(req.params.id);
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
     
-    // Allow deletion if user is admin or task owner
-    if (req.user.role !== 'admin' && task.userId !== req.user.id) {
+    // Only task owner can delete their tasks
+    if (task.userId !== req.user.id) {
       return res.status(403).json({ message: 'Not authorized to delete this task' });
     }
     
@@ -62,14 +78,19 @@ router.delete('/:id', async (req, res) => {
 // Toggle/Update task
 router.put('/:id', async (req, res) => {
   try {
+    // Prevent admins from updating tasks
+    if (req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Admins cannot update tasks' });
+    }
+    
     const task = await Task.findById(req.params.id);
     
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
     
-    // Allow updates if user is admin or task owner
-    if (req.user.role !== 'admin' && task.userId !== req.user.id) {
+    // Only task owner can update their tasks
+    if (task.userId !== req.user.id) {
       return res.status(403).json({ message: 'Not authorized to update this task' });
     }
     

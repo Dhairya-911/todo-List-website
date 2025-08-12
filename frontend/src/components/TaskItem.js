@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsapAnimations, animeAnimations, animationPresets } from '../utils/animations';
 
-const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
+const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin, currentUser }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const taskRef = useRef(null);
   const buttonRefs = useRef([]);
+
+  // Check if current user is the task owner or an admin viewing mode
+  const isTaskOwner = currentUser && task.user === currentUser.id;
+  const isAdminViewingMode = isAdmin && !isTaskOwner;
 
   // Animation on mount
   useEffect(() => {
@@ -20,6 +24,11 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
   }, [task.title]);
 
   const handleEditSave = () => {
+    // Prevent admins from editing other users' tasks
+    if (isAdminViewingMode) {
+      return;
+    }
+    
     if (editTitle.trim() && editTitle !== task.title) {
       onEdit(task._id, editTitle.trim());
     }
@@ -33,6 +42,11 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
   };
 
   const handleToggle = () => {
+    // Prevent admins from toggling other users' tasks
+    if (isAdminViewingMode) {
+      return;
+    }
+    
     if (taskRef.current) {
       // Celebration animation for task completion
       if (!task.completed) {
@@ -43,6 +57,11 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
   };
 
   const handleDelete = () => {
+    // Prevent admins from deleting other users' tasks
+    if (isAdminViewingMode) {
+      return;
+    }
+    
     if (taskRef.current) {
       gsapAnimations.taskExit(taskRef.current, () => {
         onDelete(task._id);
@@ -92,12 +111,12 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
           />
         ) : (
           <span
-            onClick={!isEditing ? handleToggle : undefined}
+            onClick={!isEditing && !isAdminViewingMode ? handleToggle : undefined}
             style={{
               ...styles.taskTitle,
               textDecoration: task.completed ? 'line-through' : 'none',
               color: task.completed ? '#9ca3af' : '#ffffff',
-              cursor: !isEditing ? 'pointer' : 'default'
+              cursor: (!isEditing && !isAdminViewingMode) ? 'pointer' : 'default'
             }}
           >
             {task.title}
@@ -105,64 +124,73 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
         )}
         
         {task.completed && !isEditing && <span style={styles.completedBadge}>✓ Completed</span>}
+        {isAdminViewingMode && (
+          <span style={styles.adminViewBadge}>
+            👁️ View Only
+          </span>
+        )}
       </div>
       
       <div style={styles.taskActions} className="task-actions">
-        {isEditing ? (
+        {/* Only show action buttons for non-admin users or task owners */}
+        {!isAdminViewingMode && (
           <>
-            <button 
-              onClick={handleEditSave}
-              style={{...styles.actionButton, ...styles.saveButton}}
-              className="task-action-button"
-            >
-              Save
-            </button>
-            <button 
-              onClick={handleEditCancel}
-              style={{...styles.actionButton, ...styles.cancelButton}}
-              className="task-action-button"
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            <button 
-              ref={el => buttonRefs.current[0] = el}
-              onClick={handleToggle}
-              onMouseEnter={() => handleButtonHover(0)}
-              onMouseLeave={() => handleButtonUnhover(0)}
-              style={{
-                ...styles.actionButton,
-                ...(task.completed ? styles.undoButton : styles.completeButton)
-              }}
-              className="task-action-button"
-            >
-              {task.completed ? 'Undo' : 'Complete'}
-            </button>
-            
-            <button 
-              ref={el => buttonRefs.current[1] = el}
-              onClick={() => setIsEditing(true)}
-              onMouseEnter={() => handleButtonHover(1)}
-              onMouseLeave={() => handleButtonUnhover(1)}
-              style={{...styles.actionButton, ...styles.editButton}}
-              className="task-action-button"
-            >
-              Edit
-            </button>
-            
-            {/* Show delete button for admin users or the task owner */}
-            <button 
-              ref={el => buttonRefs.current[2] = el}
-              onClick={handleDelete}
-              onMouseEnter={() => handleButtonHover(2)}
-              onMouseLeave={() => handleButtonUnhover(2)}
-              style={{...styles.actionButton, ...styles.deleteButton}}
-              className="task-action-button"
-            >
-              Delete
-            </button>
+            {isEditing ? (
+              <>
+                <button 
+                  onClick={handleEditSave}
+                  style={{...styles.actionButton, ...styles.saveButton}}
+                  className="task-action-button"
+                >
+                  Save
+                </button>
+                <button 
+                  onClick={handleEditCancel}
+                  style={{...styles.actionButton, ...styles.cancelButton}}
+                  className="task-action-button"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button 
+                  ref={el => buttonRefs.current[0] = el}
+                  onClick={handleToggle}
+                  onMouseEnter={() => handleButtonHover(0)}
+                  onMouseLeave={() => handleButtonUnhover(0)}
+                  style={{
+                    ...styles.actionButton,
+                    ...(task.completed ? styles.undoButton : styles.completeButton)
+                  }}
+                  className="task-action-button"
+                >
+                  {task.completed ? 'Undo' : 'Complete'}
+                </button>
+                
+                <button 
+                  ref={el => buttonRefs.current[1] = el}
+                  onClick={() => setIsEditing(true)}
+                  onMouseEnter={() => handleButtonHover(1)}
+                  onMouseLeave={() => handleButtonUnhover(1)}
+                  style={{...styles.actionButton, ...styles.editButton}}
+                  className="task-action-button"
+                >
+                  Edit
+                </button>
+                
+                <button 
+                  ref={el => buttonRefs.current[2] = el}
+                  onClick={handleDelete}
+                  onMouseEnter={() => handleButtonHover(2)}
+                  onMouseLeave={() => handleButtonUnhover(2)}
+                  style={{...styles.actionButton, ...styles.deleteButton}}
+                  className="task-action-button"
+                >
+                  Delete
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
@@ -229,6 +257,16 @@ const styles = {
     fontSize: '0.8rem',
     fontWeight: '600',
     boxShadow: '0 2px 8px rgba(34, 197, 94, 0.4)',
+  },
+  adminViewBadge: {
+    backgroundColor: '#6366f1',
+    color: 'white',
+    padding: '0.4rem 0.8rem',
+    borderRadius: '20px',
+    fontSize: '0.8rem',
+    fontWeight: '600',
+    boxShadow: '0 2px 8px rgba(99, 102, 241, 0.4)',
+    marginLeft: '0.5rem',
   },
   taskActions: {
     display: 'flex',

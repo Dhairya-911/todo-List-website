@@ -183,31 +183,36 @@ function TodoApp() {
       <div ref={containerRef} style={styles.container} className="app-container">
         {error && <div style={styles.error}>{error}</div>}
         
-        <div style={styles.addTaskSection} className="add-task-section">
-          <input 
-            value={title} 
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Enter a new task..."
-            style={styles.input}
-            className="add-task-input"
-            onKeyPress={(e) => e.key === 'Enter' && addTask()}
-          />
-          <button 
-            ref={addButtonRef}
-            onClick={addTask}
-            disabled={loading || !title.trim()}
-            style={{...styles.addButton, ...(loading ? styles.addButtonDisabled : {})}}
-            className="add-task-button"
-          >
-            {loading ? 'Adding...' : 'Add Task'}
-          </button>
-        </div>
+        {/* Only show add task section for non-admin users */}
+        {!isAdmin() && (
+          <div style={styles.addTaskSection} className="add-task-section">
+            <input 
+              value={title} 
+              onChange={e => setTitle(e.target.value)}
+              placeholder="Enter a new task..."
+              style={styles.input}
+              className="add-task-input"
+              onKeyPress={(e) => e.key === 'Enter' && addTask()}
+            />
+            <button 
+              ref={addButtonRef}
+              onClick={addTask}
+              disabled={loading || !title.trim()}
+              style={{...styles.addButton, ...(loading ? styles.addButtonDisabled : {})}}
+              className="add-task-button"
+            >
+              {loading ? 'Adding...' : 'Add Task'}
+            </button>
+          </div>
+        )}
 
         {isAdmin() && <AdminPanel />}
 
         <div ref={taskListRef} style={styles.taskList}>
           {tasks.length === 0 ? (
-            <p style={styles.noTasks}>No tasks yet. Add one above!</p>
+            <p style={styles.noTasks}>
+              {isAdmin() ? "No tasks to view in the system" : "No tasks yet. Add one above!"}
+            </p>
           ) : (
             tasks.map(t => (
               <TaskItem
@@ -217,6 +222,7 @@ function TodoApp() {
                 onDelete={() => deleteTask(t._id)}
                 onEdit={editTask}
                 isAdmin={isAdmin()}
+                currentUser={user}
               />
             ))
           )}
