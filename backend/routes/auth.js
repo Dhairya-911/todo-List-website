@@ -26,6 +26,7 @@ const demoUsers = [
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+    console.log('📝 Registration attempt:', { name, email, role });
 
     // Validation
     if (!name || !email || !password) {
@@ -73,7 +74,11 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('❌ Registration error:', error);
+    console.error('❌ Error type:', error.name);
+    console.error('❌ Error code:', error.code);
+    console.error('❌ Error message:', error.message);
+    
     if (error.code === 11000) {
       res.status(400).json({ message: 'Email already exists' });
     } else if (error.name === 'ValidationError') {
@@ -89,6 +94,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('📝 Login attempt:', { email });
 
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
@@ -136,8 +142,13 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error during login' });
+    console.error('❌ Login error:', error);
+    console.error('❌ Error type:', error.name);
+    console.error('❌ Error message:', error.message);
+    res.status(500).json({ 
+      message: 'Server error during login',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

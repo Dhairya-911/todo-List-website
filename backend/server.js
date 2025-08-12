@@ -27,12 +27,16 @@ const taskRoutes = require("./routes/Tasks");
 const adminRoutes = require('./routes/admin');
 
 // ✅ Connect to MongoDB
+console.log("Connecting to MongoDB with URI:", process.env.MONGODB_URI ? "URI provided" : "URI missing");
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => console.log("✅ Connected to MongoDB"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+.catch((err) => {
+  console.error("❌ MongoDB connection error:", err);
+  console.error("❌ Check your MONGODB_URI environment variable");
+});
 
 // ✅ API routes
 app.use('/api/auth', authRoutes);
