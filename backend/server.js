@@ -39,6 +39,27 @@ app.use('/api/auth', authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use('/api/admin', adminRoutes);
 
+// ✅ Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: "🚀 Todo List API Server is running!",
+    status: "Active",
+    endpoints: {
+      auth: "/api/auth (register, login)",
+      tasks: "/api/tasks",
+      admin: "/api/admin"
+    }
+  });
+});
+
+// ✅ Catch-all for undefined routes
+app.get('*', (req, res) => {
+  res.status(404).json({
+    message: "Route not found",
+    availableEndpoints: ["/api/auth", "/api/tasks", "/api/admin"]
+  });
+});
+
 // ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
