@@ -74,9 +74,9 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.registerBox}>
-        <h2 style={styles.title}>Create Account</h2>
+    <div style={styles.container} className="auth-container">
+      <div style={styles.registerBox} className="auth-box">
+        <h2 style={styles.title} className="auth-title">Create Account</h2>
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.inputGroup}>
@@ -88,6 +88,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
               onChange={handleChange}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Enter your full name"
             />
           </div>
@@ -101,6 +102,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
               onChange={handleChange}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Enter your email"
             />
           </div>
@@ -114,6 +116,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
               onChange={handleChange}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Enter your password (min 6 characters)"
             />
           </div>
@@ -127,6 +130,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
               onChange={handleChange}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Confirm your password"
             />
           </div>
@@ -137,6 +141,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
             type="submit" 
             disabled={loading}
             style={{...styles.submitButton, ...(loading ? styles.submitButtonDisabled : {})}}
+            className="auth-button"
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>

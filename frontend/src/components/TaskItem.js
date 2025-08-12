@@ -77,9 +77,9 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
     <div 
       ref={taskRef}
       style={{...styles.taskItem, ...(task.completed ? styles.completedTask : {})}}
-      className="task-item-animated"
+      className="task-item-animated task-item"
     >
-      <div style={styles.taskContent}>
+      <div style={styles.taskContent} className="task-content">
         {isEditing ? (
           <input
             type="text"
@@ -107,18 +107,20 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
         {task.completed && !isEditing && <span style={styles.completedBadge}>✓ Completed</span>}
       </div>
       
-      <div style={styles.taskActions}>
+      <div style={styles.taskActions} className="task-actions">
         {isEditing ? (
           <>
             <button 
               onClick={handleEditSave}
               style={{...styles.actionButton, ...styles.saveButton}}
+              className="task-action-button"
             >
               Save
             </button>
             <button 
               onClick={handleEditCancel}
               style={{...styles.actionButton, ...styles.cancelButton}}
+              className="task-action-button"
             >
               Cancel
             </button>
@@ -134,6 +136,7 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
                 ...styles.actionButton,
                 ...(task.completed ? styles.undoButton : styles.completeButton)
               }}
+              className="task-action-button"
             >
               {task.completed ? 'Undo' : 'Complete'}
             </button>
@@ -144,6 +147,7 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
               onMouseEnter={() => handleButtonHover(1)}
               onMouseLeave={() => handleButtonUnhover(1)}
               style={{...styles.actionButton, ...styles.editButton}}
+              className="task-action-button"
             >
               Edit
             </button>
@@ -155,6 +159,7 @@ const TaskItem = ({ task, onToggle, onDelete, onEdit, isAdmin }) => {
               onMouseEnter={() => handleButtonHover(2)}
               onMouseLeave={() => handleButtonUnhover(2)}
               style={{...styles.actionButton, ...styles.deleteButton}}
+              className="task-action-button"
             >
               Delete
             </button>

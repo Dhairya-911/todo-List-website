@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="./to-do-list.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Todo List</title>
   <style>
     body {
@@ -13,7 +16,12 @@
         sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      background-color: #f8f9fa;
+      background-color: #1a1a2e;
+      overflow-x: hidden;
+      /* Prevent pull-to-refresh */
+      overscroll-behavior: none;
+      /* Prevent tap highlight */
+      -webkit-tap-highlight-color: transparent;
     }
     
     * {
@@ -22,6 +30,13 @@
     
     #root {
       min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+    }
+    
+    /* Prevent iOS zoom on input focus */
+    input, textarea, select {
+      font-size: 16px !important;
     }
   </style>
 </head>

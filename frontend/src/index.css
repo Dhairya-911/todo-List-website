@@ -13,14 +13,41 @@ body {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   min-height: 100vh;
   color: #e4e4e7;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 html {
   scroll-behavior: smooth;
+  /* Prevent zoom on iOS */
+  -webkit-text-size-adjust: 100%;
 }
 
 #root {
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Mobile touch improvements */
+button, input, textarea {
+  /* Improve touch targets */
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Prevent horizontal scroll but allow vertical */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Custom input focus styles */
@@ -42,6 +69,18 @@ button:hover {
 
 button:active {
   transform: translateY(0);
+}
+
+/* Mobile-specific button styles */
+@media (max-width: 768px) {
+  button:hover {
+    transform: none; /* Disable hover transforms on mobile */
+  }
+  
+  button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
 }
 
 /* Scrollbar styling - Dark Theme */
@@ -113,6 +152,30 @@ button:active {
     flex-direction: column !important;
     gap: 0.5rem !important;
   }
+
+  /* App container mobile fix */
+  .app-container {
+    padding: 1rem 0.5rem !important;
+    margin: 0 !important;
+  }
+
+  /* Add task section mobile responsiveness */
+  .add-task-section {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .add-task-input {
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .add-task-button {
+    width: 100% !important;
+    padding: 1rem !important;
+    text-align: center !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -124,5 +187,70 @@ button:active {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .task-content {
+    width: 100% !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .task-actions {
+    width: 100% !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .task-action-button {
+    flex: 1 !important;
+    min-width: calc(50% - 0.25rem) !important;
+    padding: 0.6rem 0.8rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Header mobile fixes */
+  .header-container {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    text-align: center !important;
+  }
+
+  .user-section {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    align-items: center !important;
+  }
+
+  .user-info {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    text-align: center !important;
+  }
+
+  /* Login/Register form mobile fixes */
+  .auth-container {
+    padding: 1rem !important;
+    margin: 0 !important;
+  }
+
+  .auth-box {
+    padding: 1.5rem !important;
+    margin: 0 0.5rem !important;
+    min-height: auto !important;
+  }
+
+  .auth-title {
+    font-size: 1.5rem !important;
+  }
+
+  .auth-input {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  .auth-button {
+    padding: 1rem !important;
+    font-size: 1rem !important;
   }
 }

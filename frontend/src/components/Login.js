@@ -59,9 +59,9 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
   };
 
   return (
-    <div style={styles.container}>
-      <div ref={formRef} style={styles.loginBox}>
-        <h2 style={styles.title}>Todo App Login</h2>
+    <div style={styles.container} className="auth-container">
+      <div ref={formRef} style={styles.loginBox} className="auth-box">
+        <h2 style={styles.title} className="auth-title">Todo App Login</h2>
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.inputGroup}>
@@ -72,6 +72,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Enter your email"
             />
           </div>
@@ -84,6 +85,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
               style={styles.input}
+              className="auth-input"
               placeholder="Enter your password"
             />
           </div>
@@ -95,6 +97,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
             type="submit" 
             disabled={loading}
             style={{...styles.submitButton, ...(loading ? styles.submitButtonDisabled : {})}}
+            className="auth-button"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>

@@ -180,15 +180,16 @@ function TodoApp() {
   return (
     <div>
       <Header />
-      <div ref={containerRef} style={styles.container}>
+      <div ref={containerRef} style={styles.container} className="app-container">
         {error && <div style={styles.error}>{error}</div>}
         
-        <div style={styles.addTaskSection}>
+        <div style={styles.addTaskSection} className="add-task-section">
           <input 
             value={title} 
             onChange={e => setTitle(e.target.value)}
             placeholder="Enter a new task..."
             style={styles.input}
+            className="add-task-input"
             onKeyPress={(e) => e.key === 'Enter' && addTask()}
           />
           <button 
@@ -196,6 +197,7 @@ function TodoApp() {
             onClick={addTask}
             disabled={loading || !title.trim()}
             style={{...styles.addButton, ...(loading ? styles.addButtonDisabled : {})}}
+            className="add-task-button"
           >
             {loading ? 'Adding...' : 'Add Task'}
           </button>

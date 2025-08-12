@@ -10,12 +10,12 @@ const Header = () => {
 
   return (
     <header style={styles.header}>
-      <div style={styles.container}>
+      <div style={styles.container} className="header-container">
         <h1 style={styles.title}>Todo List</h1>
         
         {user && (
-          <div style={styles.userSection}>
-            <span style={styles.userInfo}>
+          <div style={styles.userSection} className="user-section">
+            <span style={styles.userInfo} className="user-info">
               Welcome, {user.name}
               {isAdmin() && (
                 <span style={styles.adminBadge}>ADMIN</span>
@@ -48,6 +48,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '1rem',
   },
   title: {
     margin: 0,
@@ -56,11 +58,14 @@ const styles = {
     background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    flexShrink: 0,
   },
   userSection: {
     display: 'flex',
     alignItems: 'center',
     gap: '1.5rem',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   userInfo: {
     fontSize: '1rem',
@@ -69,6 +74,8 @@ const styles = {
     gap: '0.75rem',
     color: '#a1a1aa',
     fontWeight: '500',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   adminBadge: {
     backgroundColor: '#ef4444',
@@ -78,6 +85,7 @@ const styles = {
     fontSize: '0.8rem',
     fontWeight: '600',
     boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)',
+    whiteSpace: 'nowrap',
   },
   logoutButton: {
     backgroundColor: '#6366f1',
@@ -90,6 +98,7 @@ const styles = {
     fontWeight: '600',
     transition: 'all 0.3s ease',
     boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+    whiteSpace: 'nowrap',
     '&:hover': {
       backgroundColor: '#4f46e5',
       transform: 'translateY(-1px)',
